@@ -19,14 +19,14 @@
 
 ### Frontend:
 - **UI**: HTML, CSS, JavaScript
-- **Behavior**: Built with Vanilla JS or frameworks (React, Vue.js – optional)
+- **Behavior**: Built with Vanilla JS
 
 ### Contributor Client:
 - **Language**: Python
-- **Containerization**: Designed for Podman (or Docker as an alternative)
+- **Containerization**: Designed for Podman
 
 ### Task Isolation:
-- **Containers**: Podman or Docker for securely executing workloads
+- **Containers**: Podman
 
 ---
 
