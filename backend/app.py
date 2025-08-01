@@ -31,7 +31,7 @@ def get_task_api():
 @app.route('/upload-results', methods=['POST'])
 def upload_results():
     task_id = request.form['task_id']
-    stdout = request.formp'stdout']
+    stdout = request.form['stdout']
     output_file = request.files.get('file')
 
     # save std out and files locally
