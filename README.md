@@ -47,20 +47,24 @@
 ```bash
 git clone https://github.com/philwisniewski/NightCloud.git
 cd NightCloud
+```
 
 ### 3️⃣ Running
 - **Start Backend**
   ```bash
   cd backend
   python app.py # runs on port 5000
+  ```
 - **Start Frontend**
   ```bash
   cd frontend
   python -m http.server 8000
+  ```
 - **Start worker**
   ```bash
   cd client
   python client.py
+  ```
 - **Submit tasks**
   - go to http://127.0.0.1:8000
   - fill out form and click submit
