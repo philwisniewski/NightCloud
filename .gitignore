@@ -4,3 +4,4 @@ __pycache__/
 *.zip
 venv/
 outputs/
+backend/config.py
