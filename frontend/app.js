@@ -19,7 +19,7 @@ document.getElementById('task-form').onsubmit = async function(event) {
 async function loadTasks() {
     const response = await fetch('http://127.0.0.1:5000/list-tasks');
     const tasks = await response.json();
-    
+
     const table = document.getElementById('task-table');
 
     table.innerHTML = `

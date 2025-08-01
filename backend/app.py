@@ -9,20 +9,20 @@ app = Flask(__name__)
 CORS(app)
 initialize_db()
 
-UPLOAD_FOLDER = 'outputs'
+UPLOAD_FOLDER = "outputs"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-@app.route('/submit-task', methods=['POST'])
+@app.route("/submit-task", methods=["POST"])
 def submit_task():
     data = request.json
-    docker_image = data.get('docker_image')
-    command = data.get('command')
+    docker_image = data.get("docker_image")
+    command = data.get("command")
     task_id = save_task(docker_image, command)
     return jsonify({"task_id": task_id, "status": "Task submitted"})
 
 
-@app.route('/get-task', methods=['GET'])
+@app.route("/get-task", methods=["GET"])
 def get_task_api():
     task = get_task()
     if task:
@@ -30,11 +30,11 @@ def get_task_api():
     return jsonify({"message": "No tasks available"})
 
 
-@app.route('/upload-results', methods=['POST'])
+@app.route("/upload-results", methods=["POST"])
 def upload_results():
-    task_id = request.form['task_id']
-    stdout = request.form['stdout']
-    output_file = request.files.get('file')
+    task_id = request.form["task_id"]
+    stdout = request.form["stdout"]
+    output_file = request.files.get("file")
 
     # save std out and files locally
     with open(f"{UPLOAD_FOLDER}/{task_id}_stdout.txt", "w") as f:
@@ -51,7 +51,7 @@ def upload_results():
     return jsonify({"message": "Results uploaded", "file_path": file_path})
 
 
-@app.route('/list-tasks', methods=['GET'])
+@app.route("/list-tasks", methods=["GET"])
 def list_tasks():
     tasks = get_all_tasks()
     return jsonify(tasks)
