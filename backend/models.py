@@ -9,12 +9,14 @@ DB_PATH = "database.db"
 def initialize_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS tasks (
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS tasks (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         docker_image TEXT,
                         command TEXT,
                         status TEXT DEFAULT 'queued'
-                      )""")
+                      )"""
+    )
     conn.commit()
     conn.close()
 
@@ -22,8 +24,10 @@ def initialize_db():
 def save_task(docker_image, command):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO tasks (docker_image, command) VALUES (?, ?)",
-                   (docker_image, command))
+    cursor.execute(
+        "INSERT INTO tasks (docker_image, command) VALUES (?, ?)",
+        (docker_image, command),
+    )
     conn.commit()
     task_id = cursor.lastrowid
     conn.close()
@@ -33,7 +37,9 @@ def save_task(docker_image, command):
 def get_task():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT id, docker_image, command FROM tasks WHERE status='queued' LIMIT 1")
+    cursor.execute(
+        "SELECT id, docker_image, command FROM tasks WHERE status='queued' LIMIT 1"
+    )
     task = cursor.fetchone()
     if task:
         cursor.execute("UPDATE tasks SET status='running' WHERE id=?", (task[0],))
@@ -43,6 +49,15 @@ def get_task():
     else:
         conn.close()
         return None
+
+
+def get_all_tasks():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, status FROM tasks ORDER BY id DESC")
+    tasks = cursor.fetchall()
+    conn.close()
+    return [{"task_id": row[0], "status": row[1]} for row in tasks]
 
 
 def update_task_status(task_id, status):

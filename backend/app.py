@@ -1,10 +1,12 @@
 # backend/app.py
 
 from flask import Flask, request, jsonify
-from models import initialize_db, save_task, get_task, update_task_status
+from flask_cors import CORS
+from models import initialize_db, save_task, get_task, get_all_tasks, update_task_status
 import os
 
 app = Flask(__name__)
+CORS(app)
 initialize_db()
 
 UPLOAD_FOLDER = 'outputs'
@@ -38,6 +40,8 @@ def upload_results():
     with open(f"{UPLOAD_FOLDER}/{task_id}_stdout.txt", "w") as f:
         f.write(stdout)
 
+    file_path = None
+
     if output_file:
         file_path = f"{UPLOAD_FOLDER}/{task_id}_.output.zip"
         output_file.save(file_path)
@@ -45,6 +49,12 @@ def upload_results():
     update_task_status(task_id, "completed")
 
     return jsonify({"message": "Results uploaded", "file_path": file_path})
+
+
+@app.route('/list-tasks', methods=['GET'])
+def list_tasks():
+    tasks = get_all_tasks()
+    return jsonify(tasks)
 
 
 if __name__ == "__main__":
