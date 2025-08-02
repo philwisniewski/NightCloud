@@ -5,3 +5,4 @@ __pycache__/
 venv/
 outputs/
 backend/config.py
+backend/database.db
