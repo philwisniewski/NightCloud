@@ -84,4 +84,3 @@ checkLogin();
 
 // optional auto-refresh tasks every 5s
 setInterval(loadTasks, 5000);
-

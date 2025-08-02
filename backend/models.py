@@ -9,13 +9,16 @@ DB_PATH = "database.db"
 def initialize_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute(
+        """
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         sub TEXT UNIQUE, -- OIDC subject claim
         name TEXT
-    )""")
-    cursor.execute("""
+    )"""
+    )
+    cursor.execute(
+        """
     CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         docker_image TEXT,
@@ -23,7 +26,8 @@ def initialize_db():
         status TEXT DEFAULT 'queued',
         user_id INTEGER,
         FOREIGN KEY(user_id) REFERENCES users(id)
-    )""")
+    )"""
+    )
     conn.commit()
     conn.close()
 
@@ -82,31 +86,29 @@ def save_task(docker_image, command, user_id):
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO tasks (docker_image, command, user_id) VALUES (?, ?, ?)",
-        (docker_image, command, user_id)
+        (docker_image, command, user_id),
     )
     conn.commit()
     task_id = cursor.lastrowid
     conn.close()
     return task_id
 
+
 def get_tasks_for_user(user_id):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, status FROM tasks WHERE user_id=? ORDER BY id DESC",
-        (user_id,)
+        "SELECT id, status FROM tasks WHERE user_id=? ORDER BY id DESC", (user_id,)
     )
     tasks = cursor.fetchall()
     conn.close()
     return [{"task_id": row[0], "status": row[1]} for row in tasks]
 
+
 def user_owns_task(user_id, task_id):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute(
-        "SELECT id FROM tasks WHERE id=? AND user_id=?",
-        (task_id, user_id)
-    )
+    cursor.execute("SELECT id FROM tasks WHERE id=? AND user_id=?", (task_id, user_id))
     task = cursor.fetchone()
     conn.close()
     return bool(task)
