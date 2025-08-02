@@ -12,14 +12,20 @@ import config # secrets
 
 
 app = Flask(__name__)
-CORS(app)
+app.secret_key = config.SECRET_KEY
+CORS(
+    app,
+    supports_credentials=True,
+    origins=["http://127.0.0.1:8000", "http://localhost:8000"],
+)
+
 oauth = OAuth(app)
 
 oauth.register(
     name='auth0',
     client_id=config.AUTH0_CLIENT_ID,
     client_secret=config.AUTH0_CLIENT_SECRET,
-    client_kwargs={'scope': 'openid profile email'}
+    client_kwargs={'scope': 'openid profile email'},
     server_metadata_url=f'https://{config.AUTH0_DOMAIN}/.well-known/openid-configuration'
   )
 
@@ -37,7 +43,7 @@ def index():
 @app.route("/login")
 def login():
     redirect_uri = url_for('auth', _external=True)
-    return oauth.keycloak.authorize_redirect(redirect_uri)
+    return oauth.auth0.authorize_redirect(redirect_uri)
 
 
 @app.route("/auth")
@@ -46,13 +52,14 @@ def auth():
     userinfo = token['userinfo'] if 'userinfo' in token else oauth.auth0.parse_id_token(token)
     user = get_or_create_user(userinfo['sub'], userinfo.get('name'))
     session['user'] = {'id': user['id'], 'sub': userinfo['sub'], 'name': userinfo.get('name')}
-    return redirect('/')
+    # changed from '/'
+    return redirect('http://127.0.0.1:8000')
 
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/')
+    return jsonify({"message": "Logged out"})
 
 
 @app.route("/submit-task", methods=["POST"])
@@ -114,6 +121,13 @@ def upload_results():
     update_task_status(task_id, "completed")
 
     return jsonify({"message": "Results uploaded", "file_path": file_path})
+
+
+@app.route('/me')
+def me():
+    if 'user' in session:
+        return jsonify({"id": session['user']['id'], "name": session['user'].get('name')})
+    return jsonify({"error": "unauthorized"}), 401
 
 
 if __name__ == "__main__":

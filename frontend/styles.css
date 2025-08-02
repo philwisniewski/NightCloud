@@ -1,0 +1,103 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  background: #2b2d42;
+  color: #fff;
+  padding: 1rem;
+  margin: 0;
+}
+
+#auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+}
+
+#auth button {
+  margin: 0 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: #2b2d42;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#auth button:hover {
+  background: #4d5066;
+}
+
+#user-info {
+  margin-left: 0.5rem;
+}
+
+form#task-form {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+form#task-form input[type="text"] {
+  margin-right: 0.5rem;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form#task-form button {
+  padding: 0.4rem 0.8rem;
+  background: #2b2d42;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form#task-form button:hover {
+  background: #4d5066;
+}
+
+h2 {
+  text-align: center;
+  color: #2b2d42;
+}
+
+table#task-table {
+  width: 90%;
+  margin: 0 auto 2rem auto;
+  border-collapse: collapse;
+  background: white;
+}
+
+table#task-table th, table#task-table td {
+  border: 1px solid #ddd;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+table#task-table th {
+  background: #2b2d42;
+  color: white;
+}
+
+table#task-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+a {
+  color: #2b2d42;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+

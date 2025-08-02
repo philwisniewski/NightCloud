@@ -2,17 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NightCloud Dashboard</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>NightCloud Dashboard</h1>
-  <form id="task-form">
+
+  <div id="auth">
+    <button id="login-btn">Login</button>
+    <button id="logout-btn" style="display:none">Logout</button>
+    <span id="user-info"></span>
+  </div>
+
+  <form id="task-form" style="display:none">
     <input type="text" id="docker-image" placeholder="Docker Image" required>
     <input type="text" id="command" placeholder="Command" required>
     <button type="submit">Submit Task</button>
   </form>
+
   <h2>Tasks</h2>
   <table id="task-table">
     <tr>
@@ -21,6 +28,7 @@
       <th>Output</th>
     </tr>
   </table>
+
   <script src="app.js"></script>
 </body>
 </html>
