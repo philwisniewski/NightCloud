@@ -21,8 +21,7 @@ def initialize_db():
         """
     CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        docker_image TEXT,
-        command TEXT,
+        repo TEXT,
         status TEXT DEFAULT 'queued',
         user_id INTEGER,
         FOREIGN KEY(user_id) REFERENCES users(id)
@@ -36,14 +35,14 @@ def get_task():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, docker_image, command FROM tasks WHERE status='queued' LIMIT 1"
+        "SELECT id, repo FROM tasks WHERE status='queued' LIMIT 1"
     )
     task = cursor.fetchone()
     if task:
         cursor.execute("UPDATE tasks SET status='running' WHERE id=?", (task[0],))
         conn.commit()
         conn.close()
-        return {"task_id": task[0], "docker_image": task[1], "command": task[2]}
+        return {"task_id": task[0], "repo": task[1]}
     else:
         conn.close()
         return None
@@ -81,12 +80,12 @@ def get_or_create_user(sub, name):
     return {"id": user_id}
 
 
-def save_task(docker_image, command, user_id):
+def save_task(repo, user_id):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO tasks (docker_image, command, user_id) VALUES (?, ?, ?)",
-        (docker_image, command, user_id),
+        "INSERT INTO tasks (repo, user_id) VALUES (?, ?)",
+        (repo, user_id),
     )
     conn.commit()
     task_id = cursor.lastrowid

@@ -18,14 +18,13 @@ document.getElementById('logout-btn').onclick = async () => {
 document.getElementById('task-form').onsubmit = async function(event) {
   event.preventDefault();
 
-  const dockerImage = document.getElementById('docker-image').value;
-  const command = document.getElementById('command').value;
+  const repo = document.getElementById('repo').value;
 
   const response = await fetch(`${serverUrl}/submit-task`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',  // important: send cookies
-    body: JSON.stringify({ docker_image: dockerImage, command: command }),
+    body: JSON.stringify({ repo: repo }),
   });
 
   if (response.status === 401) {
