@@ -14,7 +14,7 @@ def poll_for_task():
 
 def run_task(task):
     task_id = task["task_id"]
-    repo_url = task["repo_url"]
+    repo_url = task["repo"]
 
     print(f"Running task {task_id} for repo {repo_url}")
     subprocess.run(

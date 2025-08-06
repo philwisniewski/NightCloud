@@ -80,11 +80,11 @@ def submit_task():
         return jsonify({"error": "unauthorized"}), 401
     data = request.json
     # docker_image = data.get("docker_image")
-    repo_url = data.get("repo_url")
+    repo = data.get("repo")
     # command = data.get("command")
     user_id = session["user"]["id"]
     # task_id = save_task(docker_image, command, user_id)
-    task_id = save_task(repo_url, user_id)
+    task_id = save_task(repo, user_id)
     return jsonify({"task_id": task_id, "status": "Task submitted"})
 
 
