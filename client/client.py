@@ -12,36 +12,19 @@ def poll_for_task():
     return task if task.get("task_id") else None
 
 
-def run_task_with_podman(task):
+def run_task(task):
     task_id = task["task_id"]
-    docker_image = task["docker_image"]
-    command = task["command"]
+    repo_url = task["repo_url"]
 
-    # Pull the container image in case it's not available locally
+    print(f"Running task {task_id} for repo {repo_url}")
+    subprocess.run(
+        ["./run_task_in_lima.sh", repo_url, str(task_id)],
+        check=True
+    )
+
     subprocess.run(["podman", "pull", docker_image], check=True)
 
-    # Run the container and capture its output
-    result = subprocess.run(
-        ["podman", "run", "--rm", docker_image] + command.split(),
-        capture_output=True,
-        text=True,
-    )
-    stdout = result.stdout
-    stderr = result.stderr
-
-    if result.returncode != 0:
-        print(f"Task {task_id} failed with error: {stderr}")
-        return None, stderr
-
-    return stdout, None
-
-
-def upload_results(task_id, stdout, output_file=None):
-    data = {"task_id": task_id, "stdout": stdout}
-    files = {"file": open(output_file, "rb")} if output_file else None
-    response = requests.post(f"{SERVER_URL}/upload-results", data=data, files=files)
-    print(response.json())
-
+    return
 
 if __name__ == "__main__":
     while True:
@@ -49,10 +32,5 @@ if __name__ == "__main__":
         task = poll_for_task()
         if task:
             print(f"Task received: {task}")
-            stdout, error = run_task_with_podman(task)
-            if stdout:
-                print(f"Task output: {stdout}")
-                upload_results(task["task_id"], stdout)
-            else:
-                print(f"Task error: {error}")
+            run_task(task)
         time.sleep(5)
